@@ -200,7 +200,6 @@ if (myParam) {
     // remove query param from url?
     const buffer = fromBase64(myParam);
     const values = decodeByteBuffer(buffer);
-    console.log(values)
     localStorage.setItem("cubeState", JSON.stringify(values))
 }
 
@@ -262,9 +261,6 @@ function decodeByteBuffer(buffer) {
 function share() {
     const buffer = createByteBuffer(cubeState());
     const base64String = toBase64(buffer);
-    console.log(buffer)
-    // TODO: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_copy_clipboard2
-    console.log(base64String)
     navigator.clipboard.writeText(base64String)
 }
 
@@ -340,7 +336,7 @@ function makeMove(move) {
         return console.error(`Invalid Move: ${move}`)
     }
 
-    console.log(`Make Move: ${move}`)
+    // console.log(`Make Move: ${move}`)
     const copy = Array.from({length: 54}, (_, i) => cubeState()[i])
     const state = cubeState()
 
