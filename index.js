@@ -6,181 +6,181 @@ let polygons = []
 
 // TODO: ensure symmetry
 const vertices = [
-	[ 0, 68 ],    [ 74, 43 ],   [ 146, 18 ],
-	[ 195, 0 ],   [ 52, 90 ],   [ 126, 63 ],
-	[ 197, 38 ],  [ 248, 18 ],  [ 123, 123 ],
-	[ 194, 92 ],  [ 265, 64 ],  [ 315, 42 ],
-	[ 194, 156 ], [ 269, 121 ], [ 339, 90 ],
-	[ 389, 68 ],  [ 7, 151 ],   [ 56, 177 ],
-	[ 123, 213 ], [ 196, 250 ], [ 268, 211 ],
-	[ 331, 179 ], [ 379, 152 ], [ 14, 230 ],
-	[ 61, 259 ],  [ 126, 300 ], [ 196, 340 ],
-	[ 264, 299 ], [ 323, 261 ], [ 370, 233 ],
-	[ 20, 301 ],  [ 64, 331 ],  [ 126, 369 ],
-	[ 196, 413 ], [ 262, 367 ], [ 319, 326 ],
-	[ 364, 291 ]
+    [ 0, 68 ],    [ 74, 43 ],   [ 146, 18 ],
+    [ 195, 0 ],   [ 52, 90 ],   [ 126, 63 ],
+    [ 197, 38 ],  [ 248, 18 ],  [ 123, 123 ],
+    [ 194, 92 ],  [ 265, 64 ],  [ 315, 42 ],
+    [ 194, 156 ], [ 269, 121 ], [ 339, 90 ],
+    [ 389, 68 ],  [ 7, 151 ],   [ 56, 177 ],
+    [ 123, 213 ], [ 196, 250 ], [ 268, 211 ],
+    [ 331, 179 ], [ 379, 152 ], [ 14, 230 ],
+    [ 61, 259 ],  [ 126, 300 ], [ 196, 340 ],
+    [ 264, 299 ], [ 323, 261 ], [ 370, 233 ],
+    [ 20, 301 ],  [ 64, 331 ],  [ 126, 369 ],
+    [ 196, 413 ], [ 262, 367 ], [ 319, 326 ],
+    [ 364, 291 ]
 ]
 
 // Vertices in clockwise order.
 const faces = [
-	[0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6],
-	[4, 5, 9, 8], [5, 6, 10, 9], [6, 7, 11, 10],
-	[8, 9, 13, 12], [9, 10, 14, 13], [10, 11, 15, 14],
-	[0, 4, 17, 16], [4, 8, 18, 17], [8, 12, 19, 18],
-	[16, 17, 24, 23], [17, 18, 25, 24], [18, 19, 26, 25],
-	[23, 24, 31, 30], [24, 25, 32, 31], [25, 26, 33, 32],
-	[12, 13, 20, 19], [13, 14, 21, 20], [14, 15, 22, 21],
-	[19, 20, 27, 26], [20, 21, 28, 27], [21, 22, 29, 28],
-	[26, 27, 34, 33], [27, 28, 35, 34], [28, 29, 36, 35],
+    [0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6],
+    [4, 5, 9, 8], [5, 6, 10, 9], [6, 7, 11, 10],
+    [8, 9, 13, 12], [9, 10, 14, 13], [10, 11, 15, 14],
+    [0, 4, 17, 16], [4, 8, 18, 17], [8, 12, 19, 18],
+    [16, 17, 24, 23], [17, 18, 25, 24], [18, 19, 26, 25],
+    [23, 24, 31, 30], [24, 25, 32, 31], [25, 26, 33, 32],
+    [12, 13, 20, 19], [13, 14, 21, 20], [14, 15, 22, 21],
+    [19, 20, 27, 26], [20, 21, 28, 27], [21, 22, 29, 28],
+    [26, 27, 34, 33], [27, 28, 35, 34], [28, 29, 36, 35],
 ]
 
 // Hitbox for the entire column 0, 2, 3, 5
 const scrollPolygons = [
-	[0, 4, 31, 30],
-	[8, 12, 33, 32],
-	[12, 13, 34, 33],
-	[14, 15, 36, 35],
+    [0, 4, 31, 30],
+    [8, 12, 33, 32],
+    [12, 13, 34, 33],
+    [14, 15, 36, 35],
 ].map(x => x.map(i => vertices[i]))
 
 const horizontalPolygons = [
-	[0, 12, 15, 22, 19, 16],
-	[23, 26, 29, 36, 33, 30],
+    [0, 12, 15, 22, 19, 16],
+    [23, 26, 29, 36, 33, 30],
 ].map(x => x.map(i => vertices[i]))
 
 // TODO: extract this to a separate node.js script
 const moves = {
-	"U": {
-		"53": 44,
-		"52": 43,
-		"51": 42,
-		"9": 18,
-		"10": 19,
-		"11": 20,
-		"18": 53,
-		"19": 52,
-		"20": 51,
-		"42": 11,
-		"43": 10,
-		"44": 9,
-		"0": 6,
-		"1": 3,
-		"2": 0,
-		"5": 1,
-		"8": 2,
-		"7": 5,
-		"6": 8,
-		"3": 7,
-	},
-	"D": {
-		"15": 38,
-		"16": 37,
-		"17": 36,
-		"24": 15,
-		"25": 16,
-		"26": 17,
-		"47": 24,
-		"46": 25,
-		"45": 26,
-		"38": 47,
-		"37": 46,
-		"36": 45,
-		"27": 33,
-		"28": 30,
-		"29": 27,
-		"32": 28,
-		"35": 29,
-		"34": 32,
-		"33": 35,
-		"30": 34,
-	},
-	"R": {
-		"11": 29,
-		"14": 32,
-		"17": 35,
-		"29": 47,
-		"32": 50,
-		"35": 53,
-		"47": 8,
-		"50": 7,
-		"53": 6,
-		"8": 11,
-		"7": 14,
-		"6": 17,
-		"18": 24,
-		"19": 21,
-		"20": 18,
-		"23": 19,
-		"26": 20,
-		"25": 23,
-		"24": 26,
-		"21": 25,
-	},
-	"L": {
-		"0": 51,
-		"1": 48,
-		"2": 45,
-		"51": 33,
-		"48": 30,
-		"45": 27,
-		"33": 15,
-		"30": 12,
-		"27": 9,
-		"15": 0,
-		"12": 1,
-		"9": 2,
-		"36": 42,
-		"37": 39,
-		"38": 36,
-		"41": 37,
-		"44": 38,
-		"43": 41,
-		"42": 44,
-		"39": 43,
-	},
-	"F": {
-		"0": 36,
-		"3": 39,
-		"6": 42,
-		"18": 0,
-		"21": 3,
-		"24": 6,
-		"29": 18,
-		"28": 21,
-		"27": 24,
-		"36": 29,
-		"39": 28,
-		"42": 27,
-		"9": 15,
-		"10": 12,
-		"11": 9,
-		"14": 10,
-		"17": 11,
-		"16": 14,
-		"15": 17,
-		"12": 16,
-	},
-	"B": {
-		"20": 35,
-		"23": 34,
-		"26": 33,
-		"35": 38,
-		"34": 41,
-		"33": 44,
-		"38": 2,
-		"41": 5,
-		"44": 8,
-		"2": 20,
-		"5": 23,
-		"8": 26,
-		"45": 51,
-		"46": 48,
-		"47": 45,
-		"50": 46,
-		"53": 47,
-		"52": 50,
-		"51": 53,
-		"48": 52,
-	},
+    "U": {
+        "53": 44,
+        "52": 43,
+        "51": 42,
+        "9": 18,
+        "10": 19,
+        "11": 20,
+        "18": 53,
+        "19": 52,
+        "20": 51,
+        "42": 11,
+        "43": 10,
+        "44": 9,
+        "0": 6,
+        "1": 3,
+        "2": 0,
+        "5": 1,
+        "8": 2,
+        "7": 5,
+        "6": 8,
+        "3": 7,
+    },
+    "D": {
+        "15": 38,
+        "16": 37,
+        "17": 36,
+        "24": 15,
+        "25": 16,
+        "26": 17,
+        "47": 24,
+        "46": 25,
+        "45": 26,
+        "38": 47,
+        "37": 46,
+        "36": 45,
+        "27": 33,
+        "28": 30,
+        "29": 27,
+        "32": 28,
+        "35": 29,
+        "34": 32,
+        "33": 35,
+        "30": 34,
+    },
+    "R": {
+        "11": 29,
+        "14": 32,
+        "17": 35,
+        "29": 47,
+        "32": 50,
+        "35": 53,
+        "47": 8,
+        "50": 7,
+        "53": 6,
+        "8": 11,
+        "7": 14,
+        "6": 17,
+        "18": 24,
+        "19": 21,
+        "20": 18,
+        "23": 19,
+        "26": 20,
+        "25": 23,
+        "24": 26,
+        "21": 25,
+    },
+    "L": {
+        "0": 51,
+        "1": 48,
+        "2": 45,
+        "51": 33,
+        "48": 30,
+        "45": 27,
+        "33": 15,
+        "30": 12,
+        "27": 9,
+        "15": 0,
+        "12": 1,
+        "9": 2,
+        "36": 42,
+        "37": 39,
+        "38": 36,
+        "41": 37,
+        "44": 38,
+        "43": 41,
+        "42": 44,
+        "39": 43,
+    },
+    "F": {
+        "0": 36,
+        "3": 39,
+        "6": 42,
+        "18": 0,
+        "21": 3,
+        "24": 6,
+        "29": 18,
+        "28": 21,
+        "27": 24,
+        "36": 29,
+        "39": 28,
+        "42": 27,
+        "9": 15,
+        "10": 12,
+        "11": 9,
+        "14": 10,
+        "17": 11,
+        "16": 14,
+        "15": 17,
+        "12": 16,
+    },
+    "B": {
+        "20": 35,
+        "23": 34,
+        "26": 33,
+        "35": 38,
+        "34": 41,
+        "33": 44,
+        "38": 2,
+        "41": 5,
+        "44": 8,
+        "2": 20,
+        "5": 23,
+        "8": 26,
+        "45": 51,
+        "46": 48,
+        "47": 45,
+        "50": 46,
+        "53": 47,
+        "52": 50,
+        "51": 53,
+        "48": 52,
+    },
 }
 
 // Main
@@ -196,35 +196,35 @@ cubesDiv.appendChild(createSVG(1))
 const urlParams = new URLSearchParams(window.location.search);
 const myParam = urlParams.get("state");
 if (myParam) {
-	// TODO load into cubeState
-	// remove query param from url?
-	const buffer = fromBase64(myParam);
-	const values = decodeByteBuffer(buffer);
-	console.log(values)
-	localStorage.setItem("cubeState", JSON.stringify(values))
+    // TODO load into cubeState
+    // remove query param from url?
+    const buffer = fromBase64(myParam);
+    const values = decodeByteBuffer(buffer);
+    console.log(values)
+    localStorage.setItem("cubeState", JSON.stringify(values))
 }
 
 // Functions
 function shuffle() {
-	const shuffles = parseInt(shuffleMoves.value)
-	const availableMoves = validMoves()
+    const shuffles = parseInt(shuffleMoves.value)
+    const availableMoves = validMoves()
 
-	let i = 0
-	let lastMove = null
-	function makeNextRandomMove() {
-		if (i++ < shuffles) {
-			let randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)]
-			while (lastMove && randomMove[0] == lastMove[0] && randomMove != lastMove) {
-				// If there is a last move and it is the opposite of the current move choice
-				randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)]
-			}
-			lastMove = randomMove
-		 	makeMove(randomMove)	
-		 	setTimeout(makeNextRandomMove, 10)
-		}
-	}
+    let i = 0
+    let lastMove = null
+    function makeNextRandomMove() {
+        if (i++ < shuffles) {
+            let randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)]
+            while (lastMove && randomMove[0] == lastMove[0] && randomMove != lastMove) {
+                // If there is a last move and it is the opposite of the current move choice
+                randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)]
+            }
+            lastMove = randomMove
+             makeMove(randomMove)	
+             setTimeout(makeNextRandomMove, 10)
+        }
+    }
 
-	makeNextRandomMove()
+    makeNextRandomMove()
 }
 
 function createByteBuffer(values) {
@@ -238,17 +238,17 @@ function createByteBuffer(values) {
 }
 
 function toBase64(buffer) {
-	// TODO: https://stackoverflow.com/a/72631261 ==> 68 bits
-	let stringValue = String.fromCharCode.apply(null, buffer);
+    // TODO: https://stackoverflow.com/a/72631261 ==> 68 bits
+    let stringValue = String.fromCharCode.apply(null, buffer);
     return btoa(stringValue)
 }
 
 function fromBase64(base64String) {
-	return new Uint8Array(atob(base64String).split("").map(c => c.charCodeAt(0)))
+    return new Uint8Array(atob(base64String).split("").map(c => c.charCodeAt(0)))
 }
 
 function decodeByteBuffer(buffer) {
-	// TODO: FIX
+    // TODO: FIX
     const values = [];
     for (let i = 0, j = 0; i < buffer.length * 8 / 3; i++, j += 3) {
         const byteIndex = Math.floor(j / 8)
@@ -260,20 +260,20 @@ function decodeByteBuffer(buffer) {
 }
 
 function share() {
-	const buffer = createByteBuffer(cubeState());
-	const base64String = toBase64(buffer);
-	console.log(buffer)
-	// TODO: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_copy_clipboard2
-	console.log(base64String)
-	navigator.clipboard.writeText(base64String)
+    const buffer = createByteBuffer(cubeState());
+    const base64String = toBase64(buffer);
+    console.log(buffer)
+    // TODO: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_copy_clipboard2
+    console.log(base64String)
+    navigator.clipboard.writeText(base64String)
 }
 
 function cubeState() {
-	return JSON.parse(localStorage.getItem("cubeState"))
+    return JSON.parse(localStorage.getItem("cubeState"))
 }
 
 function validMoves() {
-	return Object.keys(moves).concat(Object.keys(moves).map(x => `${x}'`))
+    return Object.keys(moves).concat(Object.keys(moves).map(x => `${x}'`))
 }
 
 function isPointInsidePolygon(x, y, polygon) {
@@ -284,7 +284,7 @@ function isPointInsidePolygon(x, y, polygon) {
         let xj = polygon[j][0], yj = polygon[j][1]
 
         if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi))
-        	isInside = !isInside
+            isInside = !isInside
     }
 
     return isInside
@@ -292,116 +292,116 @@ function isPointInsidePolygon(x, y, polygon) {
 
 
 function resetCubeState() {
-	localStorage.setItem("cubeState", JSON.stringify(Array.from({length: 54}, (_, i) => Math.floor(i / 9))))
-	setMoveNumber(0)
+    localStorage.setItem("cubeState", JSON.stringify(Array.from({length: 54}, (_, i) => Math.floor(i / 9))))
+    setMoveNumber(0)
 }
 
 function setMoveNumber(value) {
-	moveNumber = value
-	moveNumberSpan.innerHTML = moveNumber
+    moveNumber = value
+    moveNumberSpan.innerHTML = moveNumber
 }
 
 function updatePolygons() {
-	cubeState().forEach((element, index) => {
-		polygons[index].setAttribute("fill", COLOURS[element])
-	})
+    cubeState().forEach((element, index) => {
+        polygons[index].setAttribute("fill", COLOURS[element])
+    })
 }
 
 function debug(event) {
-	document.querySelectorAll("svg text").forEach((element) => {
-	  element.classList.toggle("hide")
-	})
+    document.querySelectorAll("svg text").forEach((element) => {
+      element.classList.toggle("hide")
+    })
 }
 
 function validate() {
-	// return true if it is solveable
-	// if there could be one or two faces changed to make it valid, change their stroke
+    // return true if it is solveable
+    // if there could be one or two faces changed to make it valid, change their stroke
 }
 
 function isSolved() {
-	for (let i = 0; i < 54; i++) {
-		if (cubeState()[i] != Math.floor(i / 9)) {
-			return false
-		}
-	}
-	return true
+    for (let i = 0; i < 54; i++) {
+        if (cubeState()[i] != Math.floor(i / 9)) {
+            return false
+        }
+    }
+    return true
 }
 
 function hasWhiteCross() {
-	const WHITE = 3
-	return cubeState()[28] == WHITE
-		&& cubeState()[30] == WHITE
-		&& cubeState()[32] == WHITE
-		&& cubeState()[34] == WHITE
+    const WHITE = 3
+    return cubeState()[28] == WHITE
+        && cubeState()[30] == WHITE
+        && cubeState()[32] == WHITE
+        && cubeState()[34] == WHITE
 }
 
 function makeMove(move) {
-	if (!validMoves().includes(move)) {
-		return console.error(`Invalid Move: ${move}`)
-	}
+    if (!validMoves().includes(move)) {
+        return console.error(`Invalid Move: ${move}`)
+    }
 
-	console.log(`Make Move: ${move}`)
-	const copy = Array.from({length: 54}, (_, i) => cubeState()[i])
-	const state = cubeState()
+    console.log(`Make Move: ${move}`)
+    const copy = Array.from({length: 54}, (_, i) => cubeState()[i])
+    const state = cubeState()
 
-	for (const [key, value] of Object.entries(moves[move[0]])) {
-		if (move.endsWith("'")) {
-			state[value] = copy[key]
-		} else if (move.endsWith("2")) {
-			// TODO: do move twice
-		} else {
-			state[parseInt(key)] = copy[value]
-		}
-	}
+    for (const [key, value] of Object.entries(moves[move[0]])) {
+        if (move.endsWith("'")) {
+            state[value] = copy[key]
+        } else if (move.endsWith("2")) {
+            // TODO: do move twice
+        } else {
+            state[parseInt(key)] = copy[value]
+        }
+    }
 
-	// Note: localStorage must be set first so the updating of the polygons gets the
-	//       most recent state.
-	localStorage.setItem("cubeState", JSON.stringify(state))
-	updatePolygons()
-	// TODO: actually set this to the movequeue length, since a move can be undone by making another move
-	// keep a separate actual move and a simplified move counter
-	setMoveNumber(++moveNumber)
+    // Note: localStorage must be set first so the updating of the polygons gets the
+    //       most recent state.
+    localStorage.setItem("cubeState", JSON.stringify(state))
+    updatePolygons()
+    // TODO: actually set this to the movequeue length, since a move can be undone by making another move
+    // keep a separate actual move and a simplified move counter
+    setMoveNumber(++moveNumber)
 
-	if (isSolved()) {
-		console.log("solved!")
-	}
+    if (isSolved()) {
+        console.log("solved!")
+    }
 
-	if (hasWhiteCross()) {
-		console.log("white cross!")
-	}
+    if (hasWhiteCross()) {
+        console.log("white cross!")
+    }
 }
 
 function wonky() {
-	if (isWonky) {
-		let wonkyVertices = JSON.parse(JSON.stringify(vertices))
-		for (let i = 0; i < vertices.length; i++) {
-			wonkyVertices[i][0] += (Math.random() * 14) - 7
-			wonkyVertices[i][1] += (Math.random() * 14) - 7
-		}
-	}
-	isWonky = !isWonky
+    if (isWonky) {
+        let wonkyVertices = JSON.parse(JSON.stringify(vertices))
+        for (let i = 0; i < vertices.length; i++) {
+            wonkyVertices[i][0] += (Math.random() * 14) - 7
+            wonkyVertices[i][1] += (Math.random() * 14) - 7
+        }
+    }
+    isWonky = !isWonky
 
-	for (let i = 0; i < polygons.length; i++) {
-		// update their points. either with the wonky values or original
-	}
+    for (let i = 0; i < polygons.length; i++) {
+        // update their points. either with the wonky values or original
+    }
 }
 
 // TODO: generate this svg from JS but then include it in the HTML
 // for SEO, speed, and to at least show something for people with JS disabled.
 function createSVG(cubeNumber) {
-	const svg = document.createElementNS(SVG_NS, "svg")
-	svg.setAttribute("version", "1.1")
-	svg.setAttribute("width", 389)
-	svg.setAttribute("height", 413)
+    const svg = document.createElementNS(SVG_NS, "svg")
+    svg.setAttribute("version", "1.1")
+    svg.setAttribute("width", 389)
+    svg.setAttribute("height", 413)
 
-	// TODO: undo this
-	if (cubeNumber == 0) {
-		svg.addEventListener("wheel", (event) => wheel(event, svg, cubeNumber))
-		svg.addEventListener("mousedown", (event) => mousedown(event, svg, cubeNumber))	
-	}
+    // TODO: undo this
+    if (cubeNumber == 0) {
+        svg.addEventListener("wheel", (event) => wheel(event, svg, cubeNumber))
+        svg.addEventListener("mousedown", (event) => mousedown(event, svg, cubeNumber))	
+    }
 
-	let defs = document.createElementNS(SVG_NS, "defs")	
-	// let pattern = document.createElementNS(SVG_NS, "pattern")
+    let defs = document.createElementNS(SVG_NS, "defs")	
+    // let pattern = document.createElementNS(SVG_NS, "pattern")
     // pattern.id = "imagePattern"
     // pattern.setAttribute("patternUnits", "userSpaceOnUse")
     // pattern.setAttribute("width", 100)
@@ -413,143 +413,143 @@ function createSVG(cubeNumber) {
     // image.setAttribute("y", 0)
     // image.setAttribute("width", 100)
     // image.setAttribute("height", 100)
-	// pattern.appendChild(image)
+    // pattern.appendChild(image)
     // defs.appendChild(pattern)
 
-	const colourPairs = [
-		["rgb(254, 202, 87)", "rgb(254, 202, 87)"],
-		["rgb(84, 160, 255)", "rgb(46, 134, 222)"],
-		["rgb(255, 107, 107)", "rgb(238, 82, 83)"],
-		["rgb(200, 214, 229)", "rgb(255, 255, 255)"],
-		["rgb(255, 159, 67)", "rgb(255, 159, 67)"],
-		["rgb(29, 209, 161)", "rgb(16, 172, 132)"],
-	]
-	for (let i = 0; i < colourPairs.length; i++) {
-		let gradient = document.createElementNS(SVG_NS, "linearGradient")
-		gradient.setAttribute("id", `gradient${i}`)
-		gradient.setAttribute("x1", "0%")
-		gradient.setAttribute("y1", "0%")
-		gradient.setAttribute("x2", "100%")
-		gradient.setAttribute("y2", "100%")
-		let stop1 = document.createElementNS(SVG_NS, "stop")
-		stop1.setAttribute("offset", "0%")
-		stop1.setAttribute("style", `stop-color:${colourPairs[i][0]};stop-opacity:1`)
-		gradient.appendChild(stop1)
+    const colourPairs = [
+        ["rgb(254, 202, 87)", "rgb(254, 202, 87)"],
+        ["rgb(84, 160, 255)", "rgb(46, 134, 222)"],
+        ["rgb(255, 107, 107)", "rgb(238, 82, 83)"],
+        ["rgb(200, 214, 229)", "rgb(255, 255, 255)"],
+        ["rgb(255, 159, 67)", "rgb(255, 159, 67)"],
+        ["rgb(29, 209, 161)", "rgb(16, 172, 132)"],
+    ]
+    for (let i = 0; i < colourPairs.length; i++) {
+        let gradient = document.createElementNS(SVG_NS, "linearGradient")
+        gradient.setAttribute("id", `gradient${i}`)
+        gradient.setAttribute("x1", "0%")
+        gradient.setAttribute("y1", "0%")
+        gradient.setAttribute("x2", "100%")
+        gradient.setAttribute("y2", "100%")
+        let stop1 = document.createElementNS(SVG_NS, "stop")
+        stop1.setAttribute("offset", "0%")
+        stop1.setAttribute("style", `stop-color:${colourPairs[i][0]};stop-opacity:1`)
+        gradient.appendChild(stop1)
 
-		let stop2 = document.createElementNS(SVG_NS, "stop")
-		stop2.setAttribute("offset", "100%")
-		stop2.setAttribute("style", `stop-color:${colourPairs[i][1]};stop-opacity:1`)
-		gradient.appendChild(stop2)
+        let stop2 = document.createElementNS(SVG_NS, "stop")
+        stop2.setAttribute("offset", "100%")
+        stop2.setAttribute("style", `stop-color:${colourPairs[i][1]};stop-opacity:1`)
+        gradient.appendChild(stop2)
 
-		defs.appendChild(gradient)
-	}
+        defs.appendChild(gradient)
+    }
     
-	svg.appendChild(defs)
-	
-	for (let i = 0; i < faces.length; i++) {
-		let j = i + cubeNumber * 27
-		
-		let points = [0, 1, 2, 3].map(x => vertices[faces[i][x]])
+    svg.appendChild(defs)
+    
+    for (let i = 0; i < faces.length; i++) {
+        let j = i + cubeNumber * 27
+        
+        let points = [0, 1, 2, 3].map(x => vertices[faces[i][x]])
 
-		let polygon = document.createElementNS(SVG_NS, "polygon")
-		polygon.setAttribute("points", points.map(y => y.join(",")).join(",")) // TODO: spaces or commas between points
-		polygon.setAttribute("fill", COLOURS[cubeState()[j]])
-		// polygon.setAttribute("fill", `url(#gradient${cubeState()[j]})`)
-		polygon.setAttribute("stroke", "#222f3e")
-		polygon.setAttribute("stroke-width", 2.5)
-		if (j == 0) {
-			// Note: Attempt to add image to svg with perspective
-			// polygon.setAttribute("fill", `url(#imagePattern)`)
-			// polygon.classList.add("rotated")
+        let polygon = document.createElementNS(SVG_NS, "polygon")
+        polygon.setAttribute("points", points.map(y => y.join(",")).join(",")) // TODO: spaces or commas between points
+        polygon.setAttribute("fill", COLOURS[cubeState()[j]])
+        // polygon.setAttribute("fill", `url(#gradient${cubeState()[j]})`)
+        polygon.setAttribute("stroke", "#222f3e")
+        polygon.setAttribute("stroke-width", 2.5)
+        if (j == 0) {
+            // Note: Attempt to add image to svg with perspective
+            // polygon.setAttribute("fill", `url(#imagePattern)`)
+            // polygon.classList.add("rotated")
 
-			// polygon.setAttribute("preserveAspectRatio", "xMidYMid meet")
-			// polygon.setAttribute("viewBox", "0 0 64 64")
-		}
-		
+            // polygon.setAttribute("preserveAspectRatio", "xMidYMid meet")
+            // polygon.setAttribute("viewBox", "0 0 64 64")
+        }
+        
 
-		// Click to Cycle Input
-		// const fixedFaces = [4, 13, 22]
-		// if (!fixedFaces.includes(i)) {
-		// 	polygon.classList.add("pointer")
-		// 	polygon.addEventListener("click", (event) => cyclePolygonColour(event, j))
-		// }
+        // Click to Cycle Input
+        // const fixedFaces = [4, 13, 22]
+        // if (!fixedFaces.includes(i)) {
+        // 	polygon.classList.add("pointer")
+        // 	polygon.addEventListener("click", (event) => cyclePolygonColour(event, j))
+        // }
 
-		// Button Rotation
-		// const rotateButton = document.getElementById("rotate-button")
-		// rotateButton.addEventListener("click", event => rotateSide(columnFaces[2], true))
+        // Button Rotation
+        // const rotateButton = document.getElementById("rotate-button")
+        // rotateButton.addEventListener("click", event => rotateSide(columnFaces[2], true))
 
-		// Polygon
-		polygons.push(polygon)
-		svg.appendChild(polygon)
-		
-		// Text
-		let text = document.createElementNS(SVG_NS, "text")
-		text.textContent = j
-		text.classList.add("hide")
-		let centroid = calculateCentroid(points)
-		text.setAttribute("x", centroid.x)
-		text.setAttribute("y", centroid.y)
-		svg.appendChild(text)
-	}
+        // Polygon
+        polygons.push(polygon)
+        svg.appendChild(polygon)
+        
+        // Text
+        let text = document.createElementNS(SVG_NS, "text")
+        text.textContent = j
+        text.classList.add("hide")
+        let centroid = calculateCentroid(points)
+        text.setAttribute("x", centroid.x)
+        text.setAttribute("y", centroid.y)
+        svg.appendChild(text)
+    }
 
-	return svg
+    return svg
 }
 
 function wheel(event, parentSvg, cubeNumber) {
-	const svgRect = parentSvg.getBoundingClientRect()
+    const svgRect = parentSvg.getBoundingClientRect()
     const x = event.clientX - svgRect.left
     const y = event.clientY - svgRect.top
 
     for (let i = 0; i < scrollPolygons.length; i++) {
-    	if (isPointInsidePolygon(x, y, scrollPolygons[i])) {
-    		const moveMapping = {
-    			"-0": "L'",
-    			"+0": "L",
-    			"-1": "R",
-    			"+1": "R'",
-    			"-2": "F'",
-    			"+2": "F",
-    			"-3": "B",
-    			"+3": "B'",
-    		}
-    		makeMove(moveMapping[`${event.deltaY > 0 ? "+" : "-"}${i}`])
-    		event.preventDefault()
-    		break
-    	}	
+        if (isPointInsidePolygon(x, y, scrollPolygons[i])) {
+            const moveMapping = {
+                "-0": "L'",
+                "+0": "L",
+                "-1": "R",
+                "+1": "R'",
+                "-2": "F'",
+                "+2": "F",
+                "-3": "B",
+                "+3": "B'",
+            }
+            makeMove(moveMapping[`${event.deltaY > 0 ? "+" : "-"}${i}`])
+            event.preventDefault()
+            break
+        }	
     }
 
     updatePolygons()
 }
 
 function mousedown(event, parentSvg, cubeNumber) {
-	const svgRect = parentSvg.getBoundingClientRect()
+    const svgRect = parentSvg.getBoundingClientRect()
     const x = event.clientX - svgRect.left
     const y = event.clientY - svgRect.top
 
     horizontalPolygons.forEach((element, index) => {
-    	if (isPointInsidePolygon(x, y, element)) {
-    		const moveMapping = {
-    			"10": "U",
-    			"30": "U'",
-    			"11": "D'",
-    			"31": "D",
-    		}
-    		makeMove(moveMapping[`${event.which}${index}`])
-    	}	
+        if (isPointInsidePolygon(x, y, element)) {
+            const moveMapping = {
+                "10": "U",
+                "30": "U'",
+                "11": "D'",
+                "31": "D",
+            }
+            makeMove(moveMapping[`${event.which}${index}`])
+        }	
     })
 
     updatePolygons()
 }
 
 function cyclePolygonColour(event, j) {
-	cubeState()[j]++
-	cubeState()[j] %= COLOURS.length
-	updatePolygons()
+    cubeState()[j]++
+    cubeState()[j] %= COLOURS.length
+    updatePolygons()
 }
 
 function calculateCentroid(points) {
     return {
-    	x: points.reduce((acc, x) => acc + x[0], 0) / points.length,
-    	y: points.reduce((acc, x) => acc + x[1], 0) / points.length
+        x: points.reduce((acc, x) => acc + x[0], 0) / points.length,
+        y: points.reduce((acc, x) => acc + x[1], 0) / points.length
     }
 }

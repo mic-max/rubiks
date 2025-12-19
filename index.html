@@ -1,194 +1,60 @@
 <!doctype html>
 <html>
-	<head>
-		<title>Rubix Cube</title>
-		<link rel="stylesheet" href="style.css">
-		<link rel="icon" href="favicon.png">
-	</head>
-	<body>
-		<h1>Rubix Cube</h1>
+<head>
+  <title>Rubix Cube</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.png">
+</head>
+<body>
+  <h1>Rubix Cube</h1>
 
-		<div>
-			<p>
-				Debug Mode
-				<input id="debug" type="checkbox" onchange="debug()">
+  <div>
+    <p>
+      Debug Mode
+      <input id="debug" type="checkbox" onchange="debug()">
+      <button onclick="resetCubeState(); updatePolygons();">Reset</button>
+      <button onclick="shuffle()">Shuffle</button>
+      <!-- <button onclick="validate()">Validate</button> -->
+      <!-- <button onclick="share()">Share</button> -->
 
-				<button onclick="resetCubeState(); updatePolygons();">Reset</button>
-				<button onclick="shuffle()">Shuffle</button>
-				<!-- <button onclick="validate()">Validate</button> -->		
-				<!-- <button onclick="share()">Share</button> -->
+      <label for="shuffleMoves">Shuffle Moves:</label>
+      <input type="number" id="shuffleMoves" name="shuffleMoves" value="18" min="1" max="1000000" />
 
-				<label for="shuffleMoves">Shuffle Moves:</label>
-				<input type="number" id="shuffleMoves" name="shuffleMoves" value="18" min="1" max="1000000" />
+      <p>Move: <span id="moveNumber">0</span></p>
+      <p>Rotate the cube with scroll wheel and right and left click. Only on the left cube. You cannot rotate the inner segments.</p>
+    </p>
 
-				<p>Move: <span id="moveNumber">0</span></p>
-				<p>Rotate the cube with scroll wheel and right and left click. Only on the left cube. You cannot rotate the inner segments.</p>
-			</p>
-		  	
+    <!--
+    <p>Wonky Mode</p>
+    <input id="wonky" type="checkbox" onchange="wonky()">
+    -->
 
-			<!--
-			<p>Wonky Mode</p>
-		  	<input id="wonky" type="checkbox" onchange="wonky()">
-		  	-->
-
-			<!-- algorithm selector -->
-			<!-- beginner -->
-			<!-- Fridrich (CFOP) -->
-			<!-- step by step algorithm, tells user what it is trying to do. good for learning -->
-		</div>
-
-		<div>
-			<button onclick="makeMove('U')">U</button>
-			<button onclick="makeMove('D')">D</button>
-			<button onclick="makeMove('R')">R</button>
-			<button onclick="makeMove('L')">L</button>
-			<button onclick="makeMove('F')">F</button>
-			<button onclick="makeMove('B')">B</button>
-		</div>
-
-		<div>
-			<button onclick="makeMove(`U'`)">U'</button>
-			<button onclick="makeMove(`D'`)">D'</button>
-			<button onclick="makeMove(`R'`)">R'</button>
-			<button onclick="makeMove(`L'`)">L'</button>
-			<button onclick="makeMove(`F'`)">F'</button>
-			<button onclick="makeMove(`B'`)">B'</button>
-		</div>
-
-		<div id="cubes" oncontextmenu="return false"></div>
-
-
-<!-- TODO prebake all the 27 image perspective versions and just use them on the svg -->
-<!-- or go 3d https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotate3d -->
-<!-- https://stackoverflow.com/questions/39871739/stretch-image-to-fit-polygon-html5-canvas -->
-<!-- 3d rotate is from 2022. so to support old browsers, default to the svg version. i can add a 2d/3d toggle button -->
-
-<!-- 		<svg style="overflow:visible; margin-left:111px; margin-top:22px;" height="86" width="281">
-  <defs>
-    <pattern id="blip1" patternUnits="userSpaceOnUse" width="279" height="83">
-      <image preserveAspectRatio="none" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://i.imgur.com/uTDpE6J.jpg" width="279" height="83"></image>
-    </pattern>
-  </defs>
-  
-  <polygon id="customPolygon" points="49,2 280,2 232,84 1,84" style="stroke-linejoin:round; fill:url(#blip1); stroke-width:2; stroke:hsl(212,45%,26%); "></polygon>
-</svg> -->
-
-<!-- 3d rubix -->
-<!--
-<div class="rubik">
-  <div class="cube" style="transform: translate3d(-100px, -100px, -100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(0, -100px, -100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(100px, -100px, -100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(-100px, 0, -100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(0, 0, -100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(100px, 0, -100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(-100px, 100px, -100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(0, 100px, -100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(100px, 100px, -100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
+    <!-- algorithm selector -->
+    <!-- beginner -->
+    <!-- Fridrich (CFOP) -->
+    <!-- step by step algorithm, tells user what it is trying to do. good for learning -->
   </div>
 
-  <div class="cube" style="transform: translate3d(-100px, -100px, 0);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
+  <div>
+    <button onclick="makeMove(`U`)">U</button>
+    <button onclick="makeMove(`D`)">D</button>
+    <button onclick="makeMove(`R`)">R</button>
+    <button onclick="makeMove(`L`)">L</button>
+    <button onclick="makeMove(`F`)">F</button>
+    <button onclick="makeMove(`B`)">B</button>
   </div>
-  <div class="cube" style="transform: translate3d(0, -100px, 0);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(100px, -100px, 0);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(-100px, 0, 0);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(0, 0, 0);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(100px, 0, 0);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(-100px, 100px, 0);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(0, 100px, 0);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(100px, 100px, 0);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="
-    top">5</div><div class="bottom">6</div>
-  </div>
-  
-  <div class="cube" style="transform: translate3d(-100px, -100px, 100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(0, -100px, 100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(100px, -100px, 100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(-100px, 0, 100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(0, 0, 100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(100px, 0, 100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(-100px, 100px, 100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(0, 100px, 100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="top">5</div><div class="bottom">6</div>
-  </div>
-  <div class="cube" style="transform: translate3d(100px, 100px, 100px);">
-    <div class="front">1</div><div class="back">2</div><div class="right">3</div><div class="left">4</div><div class="
-    top">5</div><div class="bottom">6</div>
-  </div>
-</div>
--->
 
-<!-- 
-<script>
-  // Get the polygon and the image
-  var polygon = document.getElementById("customPolygon");
-  var image = polygon.parentElement.querySelector("image");
+  <div>
+    <button onclick="makeMove(`U'`)">U'</button>
+    <button onclick="makeMove(`D'`)">D'</button>
+    <button onclick="makeMove(`R'`)">R'</button>
+    <button onclick="makeMove(`L'`)">L'</button>
+    <button onclick="makeMove(`F'`)">F'</button>
+    <button onclick="makeMove(`B'`)">B'</button>
+  </div>
 
-  // Get the coordinates of the polygon points
-  var points = polygon.getAttribute("points").split(" ");
-  var x1 = parseFloat(points[0].split(",")[0]);
-  var y1 = parseFloat(points[0].split(",")[1]);
-  var x2 = parseFloat(points[1].split(",")[0]);
-  var y2 = parseFloat(points[1].split(",")[1]);
-  var x3 = parseFloat(points[2].split(",")[0]);
-  var y3 = parseFloat(points[2].split(",")[1]);
-  var x4 = parseFloat(points[3].split(",")[0]);
-  var y4 = parseFloat(points[3].split(",")[1]);
+  <div id="cubes" oncontextmenu="return false"></div>
 
-  // Update the image coordinates to fit the polygon
-  image.setAttribute("x", Math.min(x1, x4));
-  image.setAttribute("y", Math.min(y1, y2));
-  image.setAttribute("width", Math.abs(x4 - x1));
-  image.setAttribute("height", Math.abs(y4 - y1));
-</script> -->
-
-
-		<script src="index.js"></script>
-	</body>
+  <script src="index.js"></script>
+</body>
 </html>
