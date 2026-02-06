@@ -337,6 +337,7 @@ function hasWhiteCross() {
 }
 
 function makeMove(move) {
+    console.log(move)
     if (!validMoves().includes(move)) {
         return console.error(`Invalid Move: ${move}`)
     }
@@ -451,18 +452,18 @@ function createSVG(cubeNumber) {
 
         let polygon = document.createElementNS(SVG_NS, "polygon")
         polygon.setAttribute("points", points.map(y => y.join(",")).join(",")) // TODO: spaces or commas between points
-        polygon.setAttribute("fill", COLOURS[cubeState()[j]])
-        // polygon.setAttribute("fill", `url(#gradient${cubeState()[j]})`)
+        // polygon.setAttribute("fill", COLOURS[cubeState()[j]])
+        polygon.setAttribute("fill", `url(#gradient${cubeState()[j]})`)
         polygon.setAttribute("stroke", "#222f3e")
         polygon.setAttribute("stroke-width", 2.5)
-        if (j == 0) {
+        // if (j == 0) {
             // Note: Attempt to add image to svg with perspective
             // polygon.setAttribute("fill", `url(#imagePattern)`)
             // polygon.classList.add("rotated")
 
             // polygon.setAttribute("preserveAspectRatio", "xMidYMid meet")
             // polygon.setAttribute("viewBox", "0 0 64 64")
-        }
+        // }
         
 
         // Click to Cycle Input
