@@ -69,9 +69,9 @@ const WHEEL_MAPS = [
       "-3":"L'","+3":"L", "-4":"M'","+4":"M", "-5":"R", "+5":"R'" },
 ]
 
-const CLICK_MAPS = [
-    { "10":"U","30":"U'", "11":"E","31":"E'", "12":"D'","32":"D" },
-    { "10":"D","30":"D'", "11":"E'","31":"E", "12":"U'","32":"U" },
+const CLICK_MOVES = [
+    [["U","E","D'"], ["U'","E'","D"]],
+    [["D","E'","U'"], ["D'","E","U"]],
 ]
 
 const rotations = {
@@ -596,7 +596,7 @@ function mousedown(event, parentSvg, cubeNumber) {
 
     horizontalPolygons.forEach((element, index) => {
         if (isPointInsidePolygon(x, y, element)) {
-            makeMove(CLICK_MAPS[cubeNumber][`${event.which}${index}`])
+            makeMove(CLICK_MOVES[cubeNumber][event.button === 0 ? 0 : 1][index])
         }
     })
 
