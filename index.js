@@ -105,7 +105,7 @@ const movePanel = document.getElementById("movePanel")
 const sep = document.createElement("div")
 sep.className = "move-panel-separator"
 movePanel.appendChild(sep)
-Object.keys(rotations).filter((_,i) => i % 2 === 0).forEach(r => {
+Object.keys(rotations).forEach(r => {
     const d = document.createElement("div")
     d.className = "move-pair rotation-pair"
     d.innerHTML = `<button onclick="makeRotation('${r}')">${r}</button><button onclick="makeRotation('${r}\\'')">${r}'</button>`
@@ -223,7 +223,11 @@ function makeMove(move, isShuffle = false, shuffleMoveNum = null, isRotation = f
 }
 
 function makeRotation(name) {
-    rotations[name].forEach(move => makeMove(move, false, null, true))
+    const isPrime = name.endsWith("'")
+    const base = isPrime ? name.slice(0, -1) : name
+    rotations[base]
+        .map(m => isPrime ? (m.endsWith("'") ? m.slice(0, -1) : m + "'") : m)
+        .forEach(move => makeMove(move, false, null, true))
     updatePolygons()
 }
 
