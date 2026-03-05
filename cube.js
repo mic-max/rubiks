@@ -252,3 +252,32 @@ function decodeByteBuffer(buffer) {
     }
     return values
 }
+
+function solvedStates() {
+    const initial = Array.from({length: 54}, (_, i) => Math.floor(i / 9))
+
+    function inv(m) { return m.endsWith("'") ? m.slice(0, -1) : m + "'" }
+
+    function applyRot(state, name) {
+        const isPrime = name.endsWith("'")
+        const base = isPrime ? name.slice(0, -1) : name
+        const ms = rotations[base].slice()
+        if (isPrime) { ms.reverse(); ms.forEach((m, i) => { ms[i] = inv(m) }) }
+        return ms.reduce((s, m) => applyMove(s, m), state)
+    }
+
+    const seen = new Set()
+    const result = []
+    const queue = [initial]
+    seen.add(initial.join(','))
+    while (queue.length) {
+        const s = queue.shift()
+        result.push(s)
+        for (const rot of ["X", "X'", "Y", "Y'", "Z", "Z'"]) {
+            const next = applyRot(s, rot)
+            const key = next.join(',')
+            if (!seen.has(key)) { seen.add(key); queue.push(next) }
+        }
+    }
+    return result   // exactly 24 states
+}

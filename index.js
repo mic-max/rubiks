@@ -10,6 +10,8 @@ let activeTheme = localStorage.getItem("theme") || "default"
 let COLOURS = activeTheme === "custom"
     ? (JSON.parse(localStorage.getItem("colours") || "null") || [...THEMES["default"]])
     : [...THEMES[activeTheme]]
+const SOLVED_STATES = solvedStates()
+
 let polygons = []
 let paintMode = false
 let activePaintColour = null
@@ -90,8 +92,12 @@ if (myParam) {
 }
 
 cubesDiv.appendChild(createSVG(0))
-cubesDiv.appendChild(createSVG(1))
+const dualSvg = createSVG(1)
+dualSvg.id = "dual-svg"
+dualSvg.classList.add("hide")
+cubesDiv.appendChild(dualSvg)
 createColourLegend()
+updatePolygons()
 
 const movePanel = document.getElementById("movePanel")
 ;["U","E","D","R","L","F","B","M","S"].forEach(m => {
@@ -149,6 +155,58 @@ function shuffle() {
     makeNextRandomMove()
 }
 
+function solve() {
+    const btn = document.getElementById("solve-btn")
+    btn.disabled = true
+    btn.textContent = "Solving..."
+
+    const state = cubeState()
+    if (SOLVED_STATES.some(s => state.every((v, i) => v === s[i]))) {
+        btn.disabled = false
+        btn.textContent = "Solve"
+        return
+    }
+
+    const worker = new Worker("sw.js")
+
+    worker.onmessage = function(e) {
+        worker.terminate()
+        btn.disabled = false
+        btn.textContent = "Solve"
+
+        if (e.data.type === "error") {
+            console.error(e.data.message)
+            return
+        }
+
+        const solution = e.data.moves
+        moveHistoryDiv.appendChild(document.createElement("hr"))
+        moveHistoryDiv.scrollTop = moveHistoryDiv.scrollHeight
+
+        let i = 0
+        function applyNext() {
+            if (i < solution.length) {
+                i++
+                makeMove(solution[i - 1], false, i, false, true)
+                setTimeout(applyNext, 10)
+            } else {
+                moveHistoryDiv.appendChild(document.createElement("hr"))
+                moveHistoryDiv.scrollTop = moveHistoryDiv.scrollHeight
+            }
+        }
+        applyNext()
+    }
+
+    worker.onerror = function(err) {
+        worker.terminate()
+        btn.disabled = false
+        btn.textContent = "Solve"
+        console.error("Solver error:", err)
+    }
+
+    worker.postMessage({ type: "solve", state })
+}
+
 function share() {
     const buffer = createByteBuffer(cubeState());
     const base64String = toBase64(buffer);
@@ -194,6 +252,12 @@ function updatePolygons() {
     state.forEach((element, index) => {
         polygons[index].setAttribute("fill", element === -1 ? UNUSED_COLOUR : COLOURS[element])
     })
+    if (!paintMode) {
+        const btn = document.getElementById("solve-btn")
+        if (btn && btn.textContent !== "Solving...") {
+            btn.disabled = SOLVED_STATES.some(s => state.every((v, i) => v === s[i]))
+        }
+    }
 }
 
 function debug(event) {
@@ -202,21 +266,32 @@ function debug(event) {
     })
 }
 
-function makeMove(move, isShuffle = false, shuffleMoveNum = null, isRotation = false) {
+function makeMove(move, isShuffle = false, shuffleMoveNum = null, isRotation = false, isSolve = false) {
     if (!validMoves().includes(move)) {
         return console.error(`Invalid Move: ${move}`)
     }
     saveCubeState(applyMove(cubeState(), move))
     if (!isRotation) updatePolygons()
-    if (!isShuffle && !isRotation) setMoveNumber(++moveNumber)
+    if (!isShuffle && !isRotation && !isSolve) setMoveNumber(++moveNumber)
     if (!isRotation) {
-        const displayNum = isShuffle ? shuffleMoveNum : moveNumber
+        const displayNum = (isShuffle || isSolve) ? shuffleMoveNum : moveNumber
         const row = document.createElement("div")
         row.textContent = `${displayNum.toString().padStart(4)}. ${move}`
         if (isShuffle) row.classList.add("shuffle-move")
+        if (isSolve)   row.classList.add("solve-move")
         moveHistoryDiv.appendChild(row)
         moveHistoryDiv.scrollTop = moveHistoryDiv.scrollHeight
     }
+}
+
+function toggleDualView() {
+    const checked = document.getElementById("dual").checked
+    document.getElementById("dual-svg").classList.toggle("hide", !checked)
+    cubesDiv.classList.toggle("dual-view", checked)
+}
+
+function adjustShuffleMoves(delta) {
+    shuffleMoves.value = Math.max(1, parseInt(shuffleMoves.value) + delta)
 }
 
 function oppositeMove(move) {
@@ -253,8 +328,7 @@ function wonky() {
 function createSVG(cubeNumber) {
     const svg = document.createElementNS(SVG_NS, "svg")
     svg.setAttribute("version", "1.1")
-    svg.setAttribute("width", 389)
-    svg.setAttribute("height", 413)
+    svg.setAttribute("viewBox", "0 0 389 413")
 
     svg.addEventListener("wheel", (event) => wheel(event, svg, cubeNumber))
     svg.addEventListener("mousedown", (event) => mousedown(event, svg, cubeNumber))
@@ -320,8 +394,9 @@ function createSVG(cubeNumber) {
 function wheel(event, parentSvg, cubeNumber) {
     if (paintMode) return
     const svgRect = parentSvg.getBoundingClientRect()
-    const x = event.clientX - svgRect.left
-    const y = event.clientY - svgRect.top
+    const scale = svgRect.width / 389
+    const x = (event.clientX - svgRect.left) / scale
+    const y = (event.clientY - svgRect.top) / scale
 
     for (let i = 0; i < verticalPolygons.length; i++) {
         if (isPointInsidePolygon(x, y, verticalPolygons[i])) {
@@ -337,8 +412,9 @@ function wheel(event, parentSvg, cubeNumber) {
 function mousedown(event, parentSvg, cubeNumber) {
     if (paintMode) return
     const svgRect = parentSvg.getBoundingClientRect()
-    const x = event.clientX - svgRect.left
-    const y = event.clientY - svgRect.top
+    const scale = svgRect.width / 389
+    const x = (event.clientX - svgRect.left) / scale
+    const y = (event.clientY - svgRect.top) / scale
 
     horizontalPolygons.forEach((element, index) => {
         if (isPointInsidePolygon(x, y, element)) {

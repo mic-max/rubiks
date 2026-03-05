@@ -2,8 +2,21 @@
 
 A webpage where you can set the state of a rubix cube and solve it.
 
+## Usage
+1. `npm install`
+1. `npm run build`
+1. `npm run dev`
+
 ## References
 - https://jperm.net/3x3/moves
+- https://onlinecube.com/
+    - 2D unfolded and 2d isometric views.
+    - Hover move button shows an image to help show what the button does. Little arrow.
+- https://ruwix.com/online-puzzle-simulators/
+    - Steal keyboard inputs and organizing the moves into Face, Slice, Whole categories. Lowercase make inverse rotations
+    - Use it to trace out the animation frames.
+- Every possible cube state can be solved in <= 20 moves.
+    - *Including 180 degree turns
 
 ## Themes
 - [Default](https://flatuicolors.com/palette/ca)
@@ -14,24 +27,75 @@ A webpage where you can set the state of a rubix cube and solve it.
 
 ## To do
 
-- Add a footer with author information and a link to create bug report or feature requests to the GitHub repository.
-
-- Add a solve button. When pressed it will calculate a way to solve it, perform the actions, and they will be listed in the move history.
-
-- Add a timer
-    - User presses spacebar to start, or first move starts the stopwatch
-    - modes where you have limited time to look at the cube before the game time starts ticking away
-    - personal highscore tracking
-
+### Small
 - When hovering a polygon that you can scroll or click on change the cursor to the 4 direction pointer.
-- Make the share button more modern, and change cursor to copy when hovering?
 - When hovering buttons like B and F change the cursor to an arrow that points in the direction of movement? or just add a little diagram of the actual move.
+
+### Bugs
+
+- Disable solve button while in paint mode.
+- When refresh during solving... it loads with the solve button disabled.
+
+### Paint Mode
+- start each face as white? less painting required that way.
+- propose a cube state once a certain amount of colours have been added?
+
+### Coding
+
+- `npm run build` does not require all devDependencies. Namely `serve`
+
+### Preferences
+
+- Save user preferences to localStorage
+    - debug, wonky, dual, (not paint even though it looks similar), shuffle count
+
+### Big Features
+
+- Personal highscore tracking (use indexedDB to store?)
+- 1v1 mode
+
+### Shuffle
+
+- Guarantee that a cube is shuffled enough? Do I need to try to solve it using the best algorithm and then count the number of steps it took, and make sure that number is greater than some threshold value like 12?
+
+
+### Solve
+
+- If a local solve is taking too long, cancel it and perform an internet solve.
+- Add a solve button. When pressed it will calculate a way to solve it, perform the actions, and they will be listed in the move history.
+    - Make an HTTP request for the solving backend? Some devices are not fast enough to run an entire solver in javascript, especially for difficult states.
+    - Make a small backend for this project that runs in a performant language
+    - Cache the solutions
+    - Version the backend
+    - Add a toggle for offline mode that will do the solving alroithm locally, only some algorithms should be supported.
+        - Just make it a dropdown and show which ones run locally vs online.
+        - Detect internet connectivity? navigator.onLine and window.addEventListener("online" / "offline"
+    - Offline solver could have a progress bar?
+    - https://www.grubiks.com/solvers/rubiks-cube-3x3x3/ is ~300ms to solve and sends a puzzleState = `415211502530503325403451034152143152003230321241524440`
+
+### Offline
+
+- Add a way to download the site and run it for offline use? Save the html page as to downloads? What about a release artifact hosted on the github repository.
+
+### Timer
+- User presses spacebar to start, or first move starts the stopwatch
+- modes where you have limited time to look at the cube before the game time starts ticking away
+
+### Move History
+
+- move history
+    - similarly to the chrome dev console, for multiple consecutive same moves add a (x2) pill
+        - move codes wrap around from nothing to U to U2 to U' to nothing
+    - add a copy button that copies to clipboard in a useful text or binary format?
+    - buttons to advance and go back in the move queue
+- input so you can paste moves and have them be executed on the cube.
+
+### Miscellaneous
 
 add a multi select for selecting the input mode.
 hovering a face and press w,a,s,d to rotate.
 
-- in paint mode start each face as white? less painting required that way.
-- in paint mode, propose a cube state once a certain amount of colours have been added?
+## Testing
 
 - Test that the move buttons all do the correct thing. The scrolling and clicking actions all match the cube but might have the prime and non-prime swapped.
 - Add tests
@@ -50,12 +114,7 @@ preferences (shuffle cube delay in ms between each move)
 - button arrows along the perimeter of each cube on every face pointing out
     - include the keycode like R, R', U, U', etc.
 
-- move history
-    - similarly to the chrome dev console, for multiple consecutive same moves add a (x2) pill
-        - move codes wrap around from nothing to U to U2 to U' to nothing
-    - add a copy button that copies to clipboard in a useful text or binary format?
-    - buttons to advance and go back in the move queue
-- input so you can paste moves and have them be executed on the cube.
+
 
 - Add auto-detect system light mode/dark mode and remember the user preferences?
 
@@ -64,6 +123,8 @@ preferences (shuffle cube delay in ms between each move)
 - Add a button to show how shuffled the current cube is. aka how many steps to optimally solve it. Max is 20 iirc.
 
 - Add a meta description, included in stuff like search results.
+
+- Add 180 degree rotations, this will need some extra work on the animation side to play both back to back, maybe keep same delay so it takes twice as long to run the animation of a 90 degree turn, or speed it up so it is the same amount of time for each move possible.
 
 - Add embed images media stuff, so if shared on discord or twitter it shows a better looking link?
     - To make a custom image I think we'd have to make a smarter server, maybe the copy link sends an HTTP request to load the cube state on the server and save image of that cube. which then gets pushed to some static file server?
@@ -105,6 +166,7 @@ make the toggle buttons look nicer for debug and wonky mode.
 
 - localStorage interaction layer
 - Cloudflare Pages: Server side analytics
+    - Workers?
 - Make a nice dev workflow, with `npm run dev` which hotreloads and runs my build.js script.
 
 - Add a shuffle from solved button
@@ -137,3 +199,32 @@ create a test script that keeps existing functions
 
 - Test webpage load times
 - Test how long solves take on average, build a chart
+
+## Animations
+
+I can create new SVGs with their own polygons for each frame I want to add. 
+Opposite directions can be achieved by walking through the animation in reverse.
+- Horizontal (3)
+  - Top row twist
+  - Middle row twist
+  - Bottom row twist
+- Vertical (6)
+- X, Y, Z rotations (3)
+
+If I add a middle frame, and a quarter frame, the 3/4 frame will be the same as the quarter frame so I get that for free since I can walk the list then reverse once the end is reached.
+
+- So making 2 frames gets me a 5 frame animation including the start and end frames.
+- 3 -> 7
+- 4 -> 9
+- 5 -> 11
+
+Animation should take ~150ms to ~350ms?
+Should the frames be evenly spaced out in terms of the amount of degrees the selected row rotates?
+
+How many frames would be ideal for an animation that likely people will want to take 
+
+For each frame of the animation and swap between those to create the frames...
+
+It might be easier to make a 3D model and then perform the rotations and export the polygon points.
+
+This change should also come with an animation toggle and duration slider and timing function, similar to how transitions work in CSS https://www.w3schools.com/css/css3_transitions.asp
